@@ -43,7 +43,7 @@ jobs:
 
       - name: Debug connection string
         run: |
-          echo "Connection String: mongodb+srv://${{ vars.MONGO_USERNAME }}:${{ env.MONGO_PASSWORD }}@supercluster.d83jj.mongodb.net/superdata"
+          echo "Connection String: mongodb+srv://${{ env.MONGO_USERNAME }}:${{ env.MONGO_PASSWORD }}@supercluster.d83jj.mongodb.net/superdata"
 
       - name: Unit Testing
         id: nodejs-unit-testing-step
