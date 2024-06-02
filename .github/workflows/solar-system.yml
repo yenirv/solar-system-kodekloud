@@ -41,10 +41,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Debug connection string
-        run: |
-          echo "Connection String: mongodb+srv://${{ env.MONGO_USERNAME }}:${{ env.MONGO_PASSWORD }}@supercluster.d83jj.mongodb.net/superdata"
-
       - name: Unit Testing
         id: nodejs-unit-testing-step
         run: npm test
@@ -123,3 +119,10 @@ jobs:
 
           echo "Testing Image using wget"
           wget -q -O - 127.0.0.1:3000/live | grep live
+
+      - name: Docker Push
+        uses: docker/build-push-action@v5
+        with:
+		    context: .
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
