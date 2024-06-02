@@ -105,14 +105,19 @@ jobs:
           push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
+      - name: Image Tagging uses GitHub Build number in K8s manifest yaml file
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
       - name: Docker Image Test
+        env:
+          IMAGE_TAG: ${{ env.SHORT_SHA }}
         run: |
           docker images
           docker run --name solar-system-app -d \
             -p 3000:3000 \
             -e MONGO_URI=$MONGO_URI \
             -e MONGO_PASSWORD=$MONGO_PASSWORD \
-            ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:$IMAGE_TAG
 
           export IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' solar-system-app)
           echo $IP
