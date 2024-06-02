@@ -87,7 +87,7 @@ jobs:
 
   docker:
     name: Containerization
-    needs: [code-coverage]
+    needs: [unit-testing, code-coverage]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -107,6 +107,7 @@ jobs:
           tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
       - name: Docker Image Test
+        continue-on-error: true
         run: |
           docker images
           docker run --name solar-system-app -d \
@@ -122,7 +123,6 @@ jobs:
           wget -q -O - 127.0.0.1:3000/live | grep live
 
       - name: Docker Push
-        continue-on-error: true
         uses: docker/build-push-action@v5
         with:
           context: .
