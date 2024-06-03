@@ -132,7 +132,6 @@ jobs:
           wget -q -O - 127.0.0.1:3000/live | grep live
 
       - name: Container Registry Push
-      #  continue-on-error: true
         uses: docker/build-push-action@v5
         with:
           context: .
