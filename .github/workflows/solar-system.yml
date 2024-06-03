@@ -88,6 +88,8 @@ jobs:
   docker:
     name: Containerization
     needs: [unit-testing, code-coverage]
+    permissions:
+        packages: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -104,7 +106,6 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-        #  username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker Build and Push
@@ -131,7 +132,7 @@ jobs:
           wget -q -O - 127.0.0.1:3000/live | grep live
 
       - name: Container Registry Push
-        continue-on-error: true
+      #  continue-on-error: true
         uses: docker/build-push-action@v5
         with:
           context: .
